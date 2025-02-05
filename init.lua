@@ -138,7 +138,13 @@ local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  local out = vim.fn.system({ "git",
+    "clone",
+    "--filter=blob:none",
+    "--branch=stable",
+    lazyrepo,
+    lazypath
+  })
   if vim.v.shell_error ~= 0 then
     vim.api.nvim_echo({
       { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
@@ -166,9 +172,15 @@ require("lazy").setup({
     {"echasnovski/mini.nvim",
       version = false
     },
+    {"williamboman/mason.nvim"},
     {"ellisonleao/glow.nvim", config = true, cmd = "Glow"},
+    {"mhartington/formatter.nvim"},
     {"iamcco/markdown-preview.nvim",
-      cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+      cmd = {
+        "MarkdownPreviewToggle",
+        "MarkdownPreview",
+        "MarkdownPreviewStop"
+      },
       ft = { "markdown" },
       build = function() vim.fn["mkdp#util#install"]() end,
     },
@@ -185,7 +197,6 @@ require("lazy").setup({
     {"mhinz/vim-startify"},
     {'prichrd/netrw.nvim', opts = {}},
     {"nguyenvukhang/nvim-toggler", config = true},
-    {"mfussenegger/nvim-lint"},
     {"ryanoasis/vim-devicons"},
     {"lewis6991/gitsigns.nvim", confing = true},
     {"kevinhwang91/nvim-hlslens", config = true},
@@ -204,11 +215,26 @@ require("lazy").setup({
       opts = {},
       -- stylua: ignore
       keys = {
-        { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-        { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
-        { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
-        { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-        { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+        { "s", mode = { "n", "x", "o" },
+          function() require("flash").jump() end,
+          desc = "Flash"
+        },
+        { "S", mode = { "n", "x", "o" },
+          function() require("flash").treesitter() end,
+          desc = "Flash Treesitter"
+        },
+        { "r", mode = "o",
+          function() require("flash").remote() end,
+          desc = "Remote Flash"
+        },
+        { "R", mode = { "o", "x" },
+          function() require("flash").treesitter_search() end,
+          desc = "Treesitter Search"
+        },
+        { "<c-s>", mode = { "c" },
+          function() require("flash").toggle() end,
+          desc = "Toggle Flash Search"
+        },
       },
     },
     {"folke/which-key.nvim",
@@ -251,6 +277,17 @@ require("lazy").setup({
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/nvim-cmp",
       },
+      config = function()
+        local lsp_zero = require("lsp-zero")
+          lsp_zero.on_attach(function(client, bufnr)
+            -- see :help lsp-zero-keybindings to learn the available actions
+          lsp_zero.default_keymaps({
+            buffer = bufnr,
+            preserve_mappings = false
+          })
+        end)
+        require("lazy-lsp").setup {}
+      end,
     },
     {'nanozuki/tabby.nvim',
       -- event = 'VimEnter', -- if you want lazy load, see below
@@ -277,19 +314,6 @@ require("lazy").setup({
     },
   },
 
-  -- ----------
-
-  config = function()
-    local lsp_zero = require("lsp-zero")
-    lsp_zero.on_attach(function(client, bufnr)
-      -- see :help lsp-zero-keybindings to learn the available actions
-      lsp_zero.default_keymaps({
-        buffer = bufnr,
-        preserve_mappings = false
-      })
-    end)
-    require("lazy-lsp").setup {}
-  end,
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "habamax" } },
@@ -328,10 +352,19 @@ require("mini.notify").setup()
 require("mini.snippets").setup()
 require("mini.tabline").setup()
 require("mini.indentscope").setup()
+require('mini.pairs').setup()
 
 -- ----------
 
-require("auto-save")
+require("formatter").setup()
+
+-- ----------
+
+require("mason").setup()
+
+-- ----------
+
+require("auto-save").setup()
 
 -- ----------
 
