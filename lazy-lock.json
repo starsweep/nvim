@@ -1,4 +1,5 @@
 {
+  "ale": { "branch": "master", "commit": "6c337ad19ca32fcb11ff7f29a8e68598763b59a2" },
   "auto-save.nvim": { "branch": "main", "commit": "979b6c82f60cfa80f4cf437d77446d0ded0addf0" },
   "betterTerm.nvim": { "branch": "main", "commit": "5d3f41d9e8b3553d49764906a14e45a08dbe2308" },
   "cmp-nvim-lsp": { "branch": "main", "commit": "99290b3ec1322070bcfb9e846450a46f6efa50f0" },

@@ -22,6 +22,10 @@ vim.cmd('syntax on')
 
 vim.loader.enable()
 
+vim.cmd("set omnifunc=ale#completion#OmniFunc")
+vim.cmd("let g:ale_completion_enabled = 1")
+vim.cmd("let g:ale_completion_autoimport = 1")
+
 vim.api.nvim_create_user_command('Files', 'lua MiniFiles.open()', {})
 
 -- netrw config
@@ -131,7 +135,6 @@ local function netrw_maps()
 end
 
 netrw_maps()
-require("netrw").setup({})
 
 -- Bootstrap lazy.nvim
 
@@ -271,6 +274,7 @@ require("lazy").setup({
       },
     },
     {"roxma/nvim-yarp"},
+    {'dense-analysis/ale'},
     {"dundalek/lazy-lsp.nvim",
       dependencies = {
         "neovim/nvim-lspconfig",
@@ -317,23 +321,9 @@ require("lazy").setup({
   checker = { enabled = true },
 })
 
--- ----------
-
 vim.cmd[[colorscheme tokyonight]]
 
--- ----------
-
-local theme = {
-  fill = 'TabLineFill',
-  -- Also you can do this: fill = { fg='#f2e9de', bg='#907aa9', style='italic' }
-  head = 'TabLine',
-  current_tab = 'TabLineSel',
-  tab = 'TabLine',
-  win = 'TabLine',
-  tail = 'TabLine',
-}
-
--- ----------
+require("netrw").setup({})
 
 require("mini.icons").setup()
 require("mini.completion").setup()
@@ -350,19 +340,11 @@ require("mini.tabline").setup()
 require("mini.indentscope").setup()
 require('mini.pairs').setup()
 
--- ----------
-
 require("formatter").setup()
-
--- ----------
 
 require("mason").setup()
 
--- ----------
-
 require("auto-save").setup()
-
--- ----------
 
 require('ufo').setup({
   provider_selector = function(bufnr, filetype, buftype)
@@ -373,7 +355,15 @@ require('ufo').setup({
 vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
 vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
 
--- ----------
+local theme = {
+  fill = 'TabLineFill',
+  -- Also you can do this: fill = { fg='#f2e9de', bg='#907aa9', style='italic' }
+  head = 'TabLine',
+  current_tab = 'TabLineSel',
+  tab = 'TabLine',
+  win = 'TabLine',
+  tail = 'TabLine',
+}
 
 require('tabby').setup({
   line = function(line)
@@ -416,8 +406,6 @@ require('tabby').setup({
   -- option = {}, -- setup modules' option,
 })
 
--- ----------
-
 require('scrollview').setup({
   excluded_filetypes = {'nerdtree'},
   current_only = true,
@@ -427,11 +415,7 @@ require('scrollview').setup({
   diagnostics_severities = {vim.diagnostic.severity.ERROR}
 })
 
--- ----------
-
 require 'colorizer'.setup()
-
--- ----------
 
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the listed parsers MUST always be installed)
@@ -467,8 +451,6 @@ require'nvim-treesitter.configs'.setup {
     additional_vim_regex_highlighting = true,
   },
 }
-
--- ----------
 
 require('code_runner').setup({
   filetype = {
