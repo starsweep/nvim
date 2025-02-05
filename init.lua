@@ -18,6 +18,12 @@ vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decr
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 
+vim.cmd('syntax on')
+
+vim.loader.enable()
+
+vim.api.nvim_create_user_command('Files', 'lua MiniFiles.open()', {})
+
 -- netrw config
 
 vim.g.netrw_banner = 0
@@ -51,7 +57,7 @@ local function netrw_maps()
   --[[ vim.api.nvim_buf_set_keymap(
     0,
     "n",
-    "?",
+    "?",Text File.txt
     ":lua require('doom.core.settings.netrw').show_help()<CR>",
     opts
   ) ]]
@@ -124,13 +130,8 @@ local function netrw_maps()
   vim.api.nvim_buf_set_keymap(0, "n", "bj", "gb", opts)
 end
 
--- ----------
-
-vim.cmd('syntax on')
-
-vim.loader.enable()
-
-vim.api.nvim_create_user_command('Files', 'lua MiniFiles.open()', {})
+netrw_maps()
+require("netrw").setup({})
 
 -- Bootstrap lazy.nvim
 
@@ -289,12 +290,7 @@ require("lazy").setup({
         require("lazy-lsp").setup {}
       end,
     },
-    {'nanozuki/tabby.nvim',
-      -- event = 'VimEnter', -- if you want lazy load, see below
-      -- dependencies = 'nvim-tree/nvim-web-devicons',
-      -- config = function()
-      -- configs...
-    },
+    {'nanozuki/tabby.nvim'},
     {"michaelb/sniprun"},
     {"CRAG666/betterTerm.nvim",
       opts = {
@@ -376,10 +372,6 @@ require('ufo').setup({
 
 vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
 vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
-
--- ----------
-
-require("netrw").setup({})
 
 -- ----------
 
