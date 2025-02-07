@@ -1,6 +1,7 @@
 {
   "ale": { "branch": "master", "commit": "e5d6d94f71003e4d0d3b1c77cc4e2514b415e9f9" },
   "auto-save.nvim": { "branch": "main", "commit": "979b6c82f60cfa80f4cf437d77446d0ded0addf0" },
+  "battery.nvim": { "branch": "main", "commit": "e215ff0351c1c80730bb3f7d6edc612b9502d719" },
   "cmp-nvim-lsp": { "branch": "main", "commit": "99290b3ec1322070bcfb9e846450a46f6efa50f0" },
   "drop.nvim": { "branch": "main", "commit": "d2376ac1635eb71af699eda603f3dfe87c29a70d" },
   "flash.nvim": { "branch": "main", "commit": "f899265876ecdcf7352dbc9f0adf87068cedefbb" },

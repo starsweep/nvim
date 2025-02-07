@@ -15,7 +15,7 @@ vim.cmd("set undofile")
 
 vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 vim.o.foldcolumn = '1'
-vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevel = 99 -- ufo syntax provider needs a large value
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 
@@ -85,7 +85,8 @@ local function netrw_maps()
   -- Copy marked file
   vim.api.nvim_buf_set_keymap(0, "n", "fc", "mc", opts)
 
-  -- Copy marked file in one step, with this we can put the cursor in a directory
+  -- Copy marked file in one step
+  -- with this we can put the cursor in a directory
   -- after marking the file to assign target directory and copy file
   vim.api.nvim_buf_set_keymap(0, "n", "fC", "mtmc", opts)
 
@@ -285,6 +286,12 @@ require("lazy").setup({
       end,
     },
     {'nanozuki/tabby.nvim'},
+    {"justinhj/battery.nvim",
+      dependencies = {
+        "nvim-tree/nvim-web-devicons",
+        "nvim-lua/plenary.nvim",
+      },
+    },
     {'nvim-lualine/lualine.nvim',
       dependencies = { 'nvim-tree/nvim-web-devicons' }
     },
@@ -301,7 +308,8 @@ require("lazy").setup({
     -- Pheon-Dev/pigeon
   },
 
-  -- Configure any other settings here. See the documentation for more details.
+  -- Configure any other settings here.
+  -- See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "habamax" } },
   -- automatically check for plugin updates
@@ -343,10 +351,34 @@ require('ufo').setup({
     return {'treesitter', 'indent'}
     end
 })
-
 vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
 vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
 
+require("battery").setup({})
+local colors = {
+  bg       = '#202328',
+  fg       = '#bbc2cf',
+  yellow   = '#ECBE7B',
+  cyan     = '#008080',
+  darkblue = '#081633',
+  green    = '#98be65',
+  orange   = '#FF8800',
+  violet   = '#a9a1e1',
+  magenta  = '#c678dd',
+  blue     = '#51afef',
+  red      = '#ec5f67',
+}
+local nvimbattery = {
+  function()
+    return require("battery").get_status_line()
+  end,
+  color = { fg = colors.violet, bg = colors.bg },
+}
+local ostime = {
+  function()
+    return os.date("%H:%M:%S")
+  end
+}
 require('lualine').setup({
   options = {
     icons_enabled = true,
@@ -369,19 +401,19 @@ require('lualine').setup({
   },
   sections = {
     lualine_a = {'mode'},
-    lualine_b = {'branch', 'diff', 'diagnostics'},
-    lualine_c = {'filename'},
-    lualine_x = {'encoding', 'fileformat', 'filetype'},
-    lualine_y = {'progress'},
-    lualine_z = {'location'}, 
+    lualine_b = {'diagnostics'},
+    lualine_c = {'filesize', 'filename'},
+    lualine_x = {nvimbattery, ostime},
+    lualine_y = {'encoding', 'filetype'},
+    lualine_z = {'progress', 'location'},
   },
   inactive_sections = {
     lualine_a = {},
     lualine_b = {},
     lualine_c = {'filename'},
-    lualine_x = {'location'},
+    lualine_x = {},
     lualine_y = {},
-    lualine_z = {}
+    lualine_z = {'location'}
   },
   tabline = {},
   winbar = {},
@@ -391,7 +423,8 @@ require('lualine').setup({
 
 local theme = {
   fill = 'TabLineFill',
-  -- Also you can do this: fill = { fg='#f2e9de', bg='#907aa9', style='italic' }
+  -- Also you can do this:
+  -- fill = { fg='#f2e9de', bg='#907aa9', style='italic' }
   head = 'TabLine',
   current_tab = 'TabLineSel',
   tab = 'TabLine',
@@ -437,7 +470,6 @@ require('tabby').setup({
       hl = theme.fill,
     }
   end,
-  -- option = {}, -- setup modules' option,
 })
 
 require('scrollview').setup({
@@ -452,25 +484,12 @@ require('scrollview').setup({
 require 'colorizer'.setup()
 
 require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all" (the listed parsers MUST always be installed)
   ensure_installed = {},
-  -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = true,
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
   auto_install = true,
-  -- List of parsers to ignore installing (or "all")
   ignore_install = {},
-  ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-  -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
   highlight = {
     enable = true,
-    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-    -- the name of the parser)
-    -- list of language that will be disabled
-    disable = {},
-    -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
     disable = function(lang, buf)
         local max_filesize = 100 * 1024 -- 100 KB
         local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
@@ -478,10 +497,6 @@ require'nvim-treesitter.configs'.setup {
             return true
         end
     end,
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = true,
   },
 }
