@@ -1,5 +1,6 @@
 vim.o.clipboard = "unnamedplus"
 vim.o.number = true
+
 vim.o.expandtab = true
 vim.o.smartindent = true
 vim.o.tabstop = 2
@@ -211,7 +212,9 @@ require("lazy").setup({
     {"kevinhwang91/nvim-ufo",
       dependencies = {"kevinhwang91/promise-async"}
     },
-    {"ahmedkhalf/project.nvim"},
+    {"ahmedkhalf/project.nvim",
+      dependencies = {"nvim-telescope/telescope.nvim"}
+    },
     {"norcalli/nvim-colorizer.lua"},
     {"folke/flash.nvim",
       event = "VeryLazy",
@@ -290,13 +293,6 @@ require("lazy").setup({
       },
     },
     {"michaelb/sniprun"},
-    {"CRAG666/betterTerm.nvim",
-      opts = {
-      position = "bot",
-      size = 15,
-      },
-    },
-    {"CRAG666/code_runner.nvim", config = true },
     {"lukas-reineke/headlines.nvim",
       dependencies = "nvim-treesitter/nvim-treesitter",
       config = true, -- or `opts = {}`
@@ -317,6 +313,11 @@ require("lazy").setup({
 })
 
 vim.cmd[[colorscheme tokyonight]]
+
+require("project_nvim").setup()
+require('telescope').load_extension('projects')
+
+require("toggleterm").setup()
 
 require('feline').setup()
 require('feline').winbar.setup()
@@ -450,36 +451,3 @@ require'nvim-treesitter.configs'.setup {
     additional_vim_regex_highlighting = true,
   },
 }
-
-require('code_runner').setup({
-  filetype = {
-    java = {
-      "cd $dir &&",
-      "javac $fileName &&",
-      "java $fileNameWithoutExt"
-    },
-    python = "python3 -u",
-    typescript = "deno run",
-    rust = {
-      "cd $dir &&",
-      "rustc $fileName &&",
-      "$dir/$fileNameWithoutExt"
-    },
-    c = function(...)
-      c_base = {
-        "cd $dir &&",
-        "gcc $fileName -o",
-        "/tmp/$fileNameWithoutExt",
-      }
-      local c_exec = {
-        "&& /tmp/$fileNameWithoutExt &&",
-        "rm /tmp/$fileNameWithoutExt",
-      }
-      vim.ui.input({ prompt = "Add more args:" }, function(input)
-        c_base[4] = input
-        vim.print(vim.tbl_extend("force", c_base, c_exec))
-        require("code_runner.commands").run_from_fn(vim.list_extend(c_base, c_exec))
-      end)
-    end,
-  },
-})
