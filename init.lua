@@ -285,7 +285,9 @@ require("lazy").setup({
       end,
     },
     {'nanozuki/tabby.nvim'},
-    {"famiu/feline.nvim"},
+    {'nvim-lualine/lualine.nvim',
+      dependencies = { 'nvim-tree/nvim-web-devicons' }
+    },
     {"justinhj/battery.nvim",
       dependencies = {
         "nvim-lua/plenary.nvim",
@@ -319,9 +321,8 @@ require('telescope').load_extension('projects')
 
 require("toggleterm").setup()
 
-require('feline').setup()
-require('feline').winbar.setup()
 require("battery").setup({})
+require('lualine').setup({})
 
 require("netrw").setup({})
 
