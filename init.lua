@@ -260,19 +260,6 @@ require("lazy").setup({
     },
     {"folke/drop.nvim", opts = {} },
     {'akinsho/toggleterm.nvim', version = "*", config = true},
-    {"danielfalk/smart-open.nvim",
-      branch = "0.2.x",
-      config = function()
-        require("telescope").load_extension("smart_open")
-      end,
-      dependencies = {
-        "kkharji/sqlite.lua",
-        -- Only required if using match_algorithm fzf
-        { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-        -- Optional.  If installed, native fzy will be used when match_algorithm is fzy
-        { "nvim-telescope/telescope-fzy-native.nvim" },
-      },
-    },
     {"roxma/nvim-yarp"},
     {'dense-analysis/ale'},
     {"dundalek/lazy-lsp.nvim",
@@ -295,6 +282,13 @@ require("lazy").setup({
       end,
     },
     {'nanozuki/tabby.nvim'},
+    {"famiu/feline.nvim"},
+    {"justinhj/battery.nvim",
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-tree/nvim-web-devicons",
+      },
+    },
     {"michaelb/sniprun"},
     {"CRAG666/betterTerm.nvim",
       opts = {
@@ -312,6 +306,7 @@ require("lazy").setup({
       priority = 1000,
       opts = {},
     },
+    -- Pheon-Dev/pigeon
   },
 
   -- Configure any other settings here. See the documentation for more details.
@@ -322,6 +317,10 @@ require("lazy").setup({
 })
 
 vim.cmd[[colorscheme tokyonight]]
+
+require('feline').setup()
+require('feline').winbar.setup()
+require("battery").setup({})
 
 require("netrw").setup({})
 
@@ -419,7 +418,7 @@ require 'colorizer'.setup()
 
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the listed parsers MUST always be installed)
-  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
+  ensure_installed = {},
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = true,
   -- Automatically install missing parsers when entering buffer
