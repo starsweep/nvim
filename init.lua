@@ -365,7 +365,7 @@ require('Comment').setup()
 
 require("toggleterm").setup()
 
-require("netrw").setup()
+require("netrw").setup({})
 
 require("oil").setup()
 
