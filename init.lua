@@ -358,11 +358,6 @@ require("lazy").setup({
 
 vim.cmd[[colorscheme tokyonight]]
 
-<<<<<<< Updated upstream
-=======
--- Plugin init and config
-
->>>>>>> Stashed changes
 require("project_nvim").setup()
 require('telescope').load_extension('projects')
 
