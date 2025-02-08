@@ -178,9 +178,13 @@ require("lazy").setup({
     {"echasnovski/mini.nvim",
       version = false
     },
+    {"mhinz/vim-sayonara"},
+    {"moll/vim-bbye"},
     {"williamboman/mason.nvim"},
     {"ellisonleao/glow.nvim", config = true, cmd = "Glow"},
     {"mhartington/formatter.nvim"},
+    {"tpope/vim-sleuth"},
+    {"tpope/vim-fugitive"},
     {"iamcco/markdown-preview.nvim",
       cmd = {
         "MarkdownPreviewToggle",
@@ -300,6 +304,42 @@ require("lazy").setup({
       dependencies = "nvim-treesitter/nvim-treesitter",
       config = true, -- or `opts = {}`
     },
+    {"rcarriga/nvim-dap-ui",
+      dependencies = {
+        "mfussenegger/nvim-dap",
+        "nvim-neotest/nvim-nio",
+        "folke/lazydev.nvim"
+      }
+    },
+    {"SmiteshP/nvim-navbuddy",
+      dependencies = {
+        "neovim/nvim-lspconfig",
+        "SmiteshP/nvim-navic",
+        "MunifTanjim/nui.nvim",
+        "numToStr/Comment.nvim",        -- Optional
+        "nvim-telescope/telescope.nvim" -- Optional
+      },
+      config = function()
+        local navbuddy = require("nvim-navbuddy")
+        navbuddy.setup({
+          lsp = {auto_attach = true},
+        })
+      end,
+      cmd = "Navbuddy"
+    },
+    {'numToStr/Comment.nvim',
+      opts = {},
+    },
+    {'stevearc/oil.nvim',
+      ---@module 'oil'
+      ---@type oil.SetupOpts
+      opts = {},
+      -- Optional dependencies
+      dependencies = { { "echasnovski/mini.icons", opts = {} } },
+      -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+      -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+      lazy = false,
+    },
     {"folke/tokyonight.nvim",
       lazy = false,
       priority = 1000,
@@ -321,9 +361,13 @@ vim.cmd[[colorscheme tokyonight]]
 require("project_nvim").setup()
 require('telescope').load_extension('projects')
 
+require('Comment').setup()
+
 require("toggleterm").setup()
 
 require("netrw").setup({})
+
+require("oil").setup()
 
 require("mini.icons").setup()
 require("mini.completion").setup()
@@ -339,12 +383,38 @@ require("mini.snippets").setup()
 require("mini.tabline").setup()
 require("mini.indentscope").setup()
 require('mini.pairs').setup()
+require('mini.ai').setup()
+require('mini.cursorword').setup()
+require('mini.surround').setup()
 
 require("formatter").setup()
 
 require("mason").setup()
 
 require("auto-save").setup()
+
+require("lazydev").setup({
+  library = { "nvim-dap-ui" },
+})
+
+local dap, dapui = require("dap"), require("dapui")
+dap.listeners.before.attach.dapui_config = function()
+  dapui.open()
+end
+dap.listeners.before.launch.dapui_config = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated.dapui_config = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited.dapui_config = function()
+  dapui.close()
+end
+
+local navic = require("nvim-navic")
+navic.setup({
+  lsp = {auto_attach = true}
+})
 
 require('ufo').setup({
   provider_selector = function(bufnr, filetype, buftype)
