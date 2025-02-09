@@ -1,3 +1,4 @@
+-- vim.print("debug mode")
 vim.o.clipboard = "unnamedplus"
 vim.o.number = true
 
@@ -169,16 +170,18 @@ require("lazy").setup({
         "hrsh7th/nvim-cmp",
       },
       config = function()
-        local lsp_zero = require("lsp-zero")
+        if os.getenv("OS") ~= "Windows_NT" then
+          local lsp_zero = require("lsp-zero")
           lsp_zero.on_attach(function(client, bufnr)
             -- see :help lsp-zero-keybindings to learn the available actions
-          lsp_zero.default_keymaps({
-            buffer = bufnr,
-            preserve_mappings = false
-          })
-        end)
-        require("lazy-lsp").setup {}
-      end,
+            lsp_zero.default_keymaps({
+              buffer = bufnr,
+              preserve_mappings = false
+            })
+          end)
+          require("lazy-lsp").setup {}
+        end
+      end
     },
     {'nanozuki/tabby.nvim'},
     {"justinhj/battery.nvim",
