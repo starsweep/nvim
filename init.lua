@@ -571,3 +571,70 @@ end
 
 netrw_maps()
 
+-- Terrible custom auto lsp for when nix is unavailable
+
+-- Lua implementation of PHP scandir function
+local function scandir(directory)
+    local i, t, popen = 0, {}, io.popen
+    local pfile = popen('dir "'..directory..'" /b')
+    for filename in pfile:lines() do
+        i = i + 1
+        t[i] = filename
+    end
+    pfile:close()
+    return t
+end
+
+-- iterate function
+
+local function list_iter (t)
+  local i = 0
+  local n = table.getn(t)
+  return function ()
+    i = i + 1
+    if i <= n then return t[i] end
+  end
+end
+
+-- run if windows nt
+
+if os.getenv("OS") == "Windows_NT" then
+  local alepath = vim.fn.stdpath("data") .. "/lazy/ale/ale_linters"
+  local filetype = vim.bo.filetype
+  local supportedList = scandir(alepath)
+  local supportedAleLsps = scandir(alepath .. "/" .. filetype)
+  local installedLsps = scandir(vim.fn.stdpath("data") .. "/mason/packages")
+  local lang = list_iter(supportedList)    -- creates the iterator
+  local loopKill = false
+  while true do
+    local lang = lang()   -- calls the iterator
+    if lang == nil then
+      break
+    elseif filetype == lang then
+      local lsp = list_iter(supportedAleLsps)    -- creates the iterator
+      while true do
+        local lsp = lsp()   -- calls the iterator
+	      if lsp == nil then break end
+        lsp = string.sub(lsp, 1, -5)
+        local installed = list_iter(installedLsps)
+          while true do
+            local installed = installed()
+            if installed == nil then
+              break
+            elseif installed == lsp then
+              loopKill = true
+              break
+            end
+          end
+        if loopKill == true then break end
+        local installLsps, err = pcall(function()
+          if lsp == "cspell" then lsp = nil end
+          vim.cmd("MasonInstall " .. lsp)
+          loopKill = true
+        end)
+        if loopKill == true then break end
+      end
+      break
+    end
+  end
+end
