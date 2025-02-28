@@ -57,7 +57,6 @@ require("lazy").setup({
     {"mhartington/formatter.nvim"},
     {"tpope/vim-sleuth"},
     {"tpope/vim-fugitive"},
-    {"iamcco/markdown-preview.nvim", cmd = {"MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop"}, ft = {"markdown"}, build = function() vim.fn["mkdp#util#install"]() end},
     {"nullromo/go-up.nvim", opts = {}, config = function(_, opts) require('go-up').setup(opts) end},
     {"dstein64/nvim-scrollview"},
     {"pocco81/auto-save.nvim"},
