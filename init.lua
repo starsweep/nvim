@@ -164,9 +164,6 @@ require('ufo').setup({
 vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
 vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
 
--- Battery setup
-require("battery").setup({})
-
 -- Scrollview setup
 require('scrollview').setup({
   excluded_filetypes = {'nerdtree', 'fugitive', 'man'},
@@ -179,6 +176,7 @@ require('gitsigns').setup({
 
 -- ALE (Asynchronous Linting and Fixing) setup
 vim.g.ale_linters_explicit = 1
+
 require("battery").setup({})
 local colors = {
   bg       = '#202329',
