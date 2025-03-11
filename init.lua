@@ -8,12 +8,6 @@ vim.o.shiftwidth = 2
 vim.o.termguicolors = true
 vim.o.wrap = true
 vim.o.syntax = "on"
-vim.cmd("set noswapfile")
-vim.cmd("set undofile")
-
--- Syntax & loader
-vim.cmd('syntax on')
-vim.loader.enable()
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -43,5 +37,9 @@ require("lazy").setup({
   checker = { enabled = true },
 })
 
--- Setup colorscheme
+-- commands to run
+vim.cmd("set noswapfile")
+vim.cmd("set undofile")
 vim.cmd[[colorscheme tokyonight]]
+vim.cmd('syntax on')
+vim.loader.enable()
