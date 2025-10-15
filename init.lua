@@ -85,15 +85,6 @@ require("lazy").setup({
     {"akinsho/toggleterm.nvim", version = "*", config = true},
     {"roxma/nvim-yarp"},
     {"dense-analysis/ale"},
-    {"dundalek/lazy-lsp.nvim", dependencies = {"neovim/nvim-lspconfig", {"VonHeikemen/lsp-zero.nvim", branch = "v3.x"}, "hrsh7th/cmp-nvim-lsp", "hrsh7th/nvim-cmp"}, config = function()
-      if os.getenv("OS") ~= "Windows_NT" then
-        local lsp_zero = require("lsp-zero")
-        lsp_zero.on_attach(function(client, bufnr)
-          lsp_zero.default_keymaps({ buffer = bufnr, preserve_mappings = false })
-        end)
-        require("lazy-lsp").setup {}
-      end
-    end},
     {"nanozuki/tabby.nvim"},
     {"justinhj/battery.nvim", dependencies = {"nvim-tree/nvim-web-devicons", "nvim-lua/plenary.nvim"}},
     {'nvim-lualine/lualine.nvim', dependencies = {'nvim-tree/nvim-web-devicons'}},
