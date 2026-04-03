@@ -1,3 +1,9 @@
+-- shim deprecated function
+local orig = vim.lsp.buf_get_clients
+vim.lsp.buf_get_clients = function(bufnr)
+  return vim.lsp.get_clients({ bufnr = bufnr })
+end
+
 -- General settings
 vim.o.clipboard = "unnamedplus"
 vim.o.number = true
@@ -8,7 +14,6 @@ vim.o.shiftwidth = 2
 vim.o.termguicolors = true
 vim.o.wrap = true
 vim.o.showtabline = 2
-vim.o.syntax = "on"
 vim.cmd("set noswapfile")
 vim.cmd("set undofile")
 
@@ -83,7 +88,6 @@ require("lazy").setup({
     }},
     {"folke/drop.nvim", opts = {}},
     {"akinsho/toggleterm.nvim", version = "*", config = true},
-    {"roxma/nvim-yarp"},
     {"dense-analysis/ale"},
     {"nanozuki/tabby.nvim"},
     {"justinhj/battery.nvim", dependencies = {"nvim-tree/nvim-web-devicons", "nvim-lua/plenary.nvim"}},
@@ -109,7 +113,6 @@ vim.cmd[[colorscheme tokyonight]]
 -- Plugin configurations
 require("project_nvim").setup()
 require('telescope').load_extension('projects')
-require('Comment').setup()
 require("toggleterm").setup()
 require("netrw").setup({})
 require("oil").setup()
