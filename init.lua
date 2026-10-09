@@ -64,7 +64,6 @@ require("lazy").setup({
     {"tpope/vim-fugitive"},
     {"nullromo/go-up.nvim", opts = {}, config = function(_, opts) require('go-up').setup(opts) end},
     {"dstein64/nvim-scrollview"},
-    {"pocco81/auto-save.nvim"},
     {"nvim-treesitter/nvim-treesitter", config = true},
     {"mhinz/vim-startify"},
     {"prichrd/netrw.nvim", opts = {}},
@@ -133,7 +132,6 @@ require('mini.cursorword').setup()
 require('mini.surround').setup()
 require("formatter").setup()
 require("mason").setup()
-require("auto-save").setup()
 
 -- LSP settings
 require("lazydev").setup({ library = { "nvim-dap-ui" } })
